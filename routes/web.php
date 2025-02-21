@@ -5,6 +5,7 @@ use App\Http\Controllers\ComumController;
 use App\Http\Controllers\GrupoMuscularController;
 use App\Http\Controllers\MaquinaTreinoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SerieExercicioController;
 use App\Mail\TestEmail;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +59,8 @@ Route::controller(MaquinaTreinoController::class)->group(function(){
     Route::delete('/maquina_treino/destroy/{idMaquina}', 'destroy')->name('maquina_treino.destroy');
 });
 
+
+
 Route::controller(GrupoMuscularController::class)->group(function(){
     Route::get('/grupo_muscular/index', 'index')->name('grupo_muscular.index');
     Route::get('/grupo_muscular/create', 'create')->name('grupo_muscular.create');
@@ -77,4 +80,14 @@ Route::middleware('auth')->group(function () {
     })->name('users');
 });
 
+
+
+Route::controller(SerieExercicioController::class)->group(function(){
+    Route::get('/serie_exercicio/index', 'index')->name('serie_exercicio.index');
+    Route::get('/serie_exercicio/create', 'create')->name('serie_exercicio.create');
+    Route::post('/serie_exercicio/store', 'store')->name('serie_exercicio.store');
+    Route::get('/serie_exercicio/edit/{idMaquina}', 'edit')->name('serie_exercicio.edit');
+    Route::post('/serie_exercicio/update/{idMaquina}', 'update')->name('serie_exercicio.update');
+    Route::delete('/serie_exercicio/destroy/{idMaquina}', 'destroy')->name('serie_exercicio.destroy');
+});
 require __DIR__ . '/auth.php';

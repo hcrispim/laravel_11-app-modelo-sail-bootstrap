@@ -3,7 +3,7 @@
     <div class="page-content">
         <nav class="page-breadcrumb">
             <ol class="breadcrumb">
-                <a href="{{ route('maquina_treino.create') }}" class="btn btn-inverse-info"> Adicionar máquina </a>
+                <a href="{{ route('maquina_treino.create') }}" class="btn btn-inverse-info"> Adicionar máquina de treino </a>
             </ol>
         </nav>
 

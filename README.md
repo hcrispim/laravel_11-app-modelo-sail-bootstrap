@@ -65,19 +65,19 @@ We recommend every repository include a README, LICENSE, and .gitignore.
 
 echo "# laravel_11-app-modelo-sail-bootstrap" >> README.md
 
-git init
+sudo git init
 
-git add README.md
+sudo git add README.md
 
-git add .
+sudo git add .
 
-git commit -m "first commit"
+sudo git commit -m "primeiro commit"
 
-git branch -M main
+sudo git branch -M main
 
-git remote add origin https://github.com/hcrispim/laravel_11-app-modelo-sail-bootstrap.git
+sudo git remote add origin https://github.com/hcrispim/laravel_11-app-modelo-sail-bootstrap.git
 
-git push -u origin main
+sudo git push -u origin main
 
 …or push an existing repository from the command line
 
