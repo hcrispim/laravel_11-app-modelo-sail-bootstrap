@@ -34,16 +34,9 @@
 
                         </div>
                     </div>
-
-
                 </div>
             </div>
-            <!-- middle wrapper end -->
-            <!-- right wrapper start -->
-
-            <!-- right wrapper end -->
         </div>
-
     </div>
 
 @endsection

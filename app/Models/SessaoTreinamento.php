@@ -24,4 +24,8 @@ class SessaoTreinamento extends Model
     {
         return $this->belongsTo(ProgramaTreinamento::class, 'id_programa_treinamento');
     }
+    public function seriesExercicio()
+    {
+        return $this->hasMany(SerieExercicio::class, 'id_sessao_treinamento');
+    }
 }

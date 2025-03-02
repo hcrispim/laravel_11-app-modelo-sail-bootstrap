@@ -81,8 +81,8 @@ sudo git push -u origin main
 
 …or push an existing repository from the command line
 
-git remote add origin https://github.com/hcrispim/laravel_11-app-modelo-sail-bootstrap.git
+sudo git remote add origin https://github.com/hcrispim/laravel_11-app-modelo-sail-bootstrap.git
 
-git branch -M main
+sudo git branch -M main
 
-git push -u origin main
+sudo git push -u origin main

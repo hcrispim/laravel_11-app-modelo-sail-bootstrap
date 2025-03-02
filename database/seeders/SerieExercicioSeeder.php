@@ -23,14 +23,16 @@ class SerieExercicioSeeder extends Seeder
                 'repeticoes_series' => 12,
                 'carga' => 100.0,
             ],
+
             [
                 'id_sessao_treinamento' => 1,
                 'id_grupo_muscular' => 2,
                 'id_maquina_treino' => 2,
-                'numero_series' => 3,
-                'repeticoes_series' => 10,
-                'carga' => 80.0,
+                'numero_series' => 5,
+                'repeticoes_series' => 5,
+                'carga' => 100.0,
             ],
+
             [
                 'id_sessao_treinamento' => 2,
                 'id_grupo_muscular' => 3,

@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="Responsive HTML Admin Dashboard Template based on Bootstrap 5">
     <meta name="author" content="NobleUI">
-    <meta name="keywords" content="nobleui, bootstrap, bootstrap 5, bootstrap5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+    <meta name="keywords"
+          content="nobleui, bootstrap, bootstrap 5, bootstrap5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
     <title>Admin Panel </title>
     <!-- Fonts -->
@@ -34,8 +35,8 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{ asset('backend/assets/css/demo2/style.css') }}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
+    <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 </head>
 <body>
 <div class="main-wrapper">
@@ -83,7 +84,7 @@
 <script>
     @if(Session::has('message'))
     var type = "{{ Session::get('alert-type','info') }}"
-    switch(type){
+    switch (type) {
         case 'info':
             toastr.info(" {{ Session::get('message') }} ");
             break;
@@ -135,7 +136,136 @@
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
+@if(isset($sessoesTreinamento) && isset($isSerieExercicioPage))
+    <script>
+        var programaTreinamentoSelect = document.getElementById('id_programa_treinamento');
+        programaTreinamentoSelect.addEventListener('click', function () {
+            var programaTreinamentoId = this.value;
+            var sessoesTreinamento = @json($sessoesTreinamento);
+            var sessaoTreinamentoSelect = document.getElementById('id_sessao_treinamento');
+            var hiddenSessaoTreinamento = document.getElementById('hidden_id_sessao_treinamento'); // Localizar o campo hidden
 
+            sessaoTreinamentoSelect.innerHTML = '';
+            sessoesTreinamento.forEach(sessao => {
+                if (sessao.id_programa_treinamento == programaTreinamentoId) {
+                    var option = document.createElement('option');
+                    option.value = sessao.id_sessao_treinamento;
+                    option.text = sessao.dt_sessao_planejada;
+                    sessaoTreinamentoSelect.appendChild(option);
+                }
+              });
+
+             // Atualiza o valor do campo hidden ao selecionar a primeira opção
+            if (sessaoTreinamentoSelect.options.length > 0) {
+                hiddenSessaoTreinamento.value = sessaoTreinamentoSelect.options[0].value;
+            }
+
+            // Adiciona listener para atualizar o campo hidden quando o valor do select mudar
+            sessaoTreinamentoSelect.addEventListener('change', function () {
+                hiddenSessaoTreinamento.value = this.value;
+            });
+            //fim declaracao hidden
+       });
+    </script>
+@endif
+
+{{--//IMPLEMENTAR A ESCOLHA DA SESSAO DE TREINAMENTO--}}
+{{--//QUE APARECE POR DATA, MAS PRECISA DO NUMERO PARA INCLUSAO--}}
+
+@if(isset($seriesExercicio) and isset($gruposMusculares) and isset($maquinasTreino) )
+<script>
+    document.getElementById('id_sessao_treinamento').addEventListener('click', function () {
+        var sessaoTreinamentoId = this.value;
+        var seriesExercicio = @json($seriesExercicio);
+        var gruposMusculares = @json($gruposMusculares);
+        var maquinasTreino = @json($maquinasTreino);
+        var tabelaSerieTreinamento = document.getElementById('tabela_serie_treinamento');
+        tabelaSerieTreinamento.innerHTML = `
+        <tr>
+            <th>Sessão Treino</th>
+            <th>Grupo Muscular</th>
+            <th>Máquina de Treino</th>
+            <th>Número de Séries</th>
+            <th>Repetições</th>
+            <th>Carga</th>
+        </tr>
+    `;
+        seriesExercicio.forEach(serie => {
+            if (serie.id_sessao_treinamento == sessaoTreinamentoId) {
+
+                // Encontrar o nome do grupo muscular correspondente
+                var nomeGrupoMuscular = gruposMusculares.find(grupo => grupo.id_grupo_muscular == serie.id_grupo_muscular).nome_grupo_muscular;
+                // Encontrar o nome da máquina de treino correspondente
+                var nomeMaquinaTreino = maquinasTreino.find(maquina => maquina.id_maquina_treino == serie.id_maquina_treino).nome_maquina_treino
+                var editUrl = "{{ route('serie_exercicio.edit', ':id') }}".replace(':id', serie.id_serie_exercicio);
+                var deleteUrl = "{{ route('serie_exercicio.destroy', ':id') }}".replace(':id', serie.id_serie_exercicio);
+                var row = `
+                <tr>
+                    <td>${serie.id_sessao_treinamento}</td>
+                    <td>${nomeGrupoMuscular}</td>
+                    <td>${nomeMaquinaTreino}</td>
+                    <td>${serie.numero_series}</td>
+                    <td>${serie.repeticoes_series}</td>
+                    <td>${serie.carga}</td>
+                    <td>
+                      <a href="${editUrl}" class="btn btn-inverse-warning"> Editar </a>
+                      <form action="${deleteUrl}" method="POST" style="display:inline-block;">
+                       @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-inverse-danger"  >Apagar</button>
+                </form>
+              </td>
+          </tr>
+`;
+                tabelaSerieTreinamento.innerHTML += row;
+            }
+        });
+    });
+</script>
+@endif
+
+@if(isset($sessoesTreinamento) && isset($isSessaoTreinamentoPage))
+    <script>
+        document.getElementById('id_programa_treinamento').addEventListener('click', function () {
+            var programaTreinamentoId = this.value;
+            var sessoesTreinamento = @json($sessoesTreinamento);
+            var tabelaSessaoTreinamento = document.getElementById('tabela_sessao_treinamento');
+            tabelaSessaoTreinamento.innerHTML = `
+        <tr>
+            <th>Prog Treinamento</th>
+            <th>Dt Sessao pla</th>
+            <th>Tempo duração plan</th>
+            <th>Dt Sessao exec</th>
+            <th>Tempo duração exec</th>
+        </tr>
+    `;
+            sessoesTreinamento.forEach(sessao => {
+                if (sessao.id_programa_treinamento == programaTreinamentoId) {
+                    var editUrl = "{{ route('sessao_treinamento.edit', ':id') }}".replace(':id', sessao.id_sessao_treinamento);
+                    var deleteUrl = "{{ route('sessao_treinamento.destroy', ':id') }}".replace(':id', sessao.id_sessao_treinamento);
+                    var row = `
+                <tr>
+                    <td>${sessao.id_programa_treinamento}</td>
+                    <td>${sessao.dt_sessao_planejada}</td>
+                    <td>${sessao.tempo_duracao_planejada}</td>
+                    <td>${sessao.dt_sessao_executada}</td>
+                    <td>${sessao.tempo_duracao_executada}</td>
+                    <td>
+                      <a href="${editUrl}" class="btn btn-inverse-warning"> Editar </a>
+                      <form action="${deleteUrl}" method="POST" style="display:inline-block;">
+                       @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-inverse-danger"  >Apagar</button>
+                    </form>
+                  </td>
+              </tr>
+`               ;
+                    tabelaSessaoTreinamento.innerHTML += row;
+                }
+            });
+        });
+    </script>
+@endif
 </body>
 </html>
 
