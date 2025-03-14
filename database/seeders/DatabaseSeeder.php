@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersTableSeeder::class,
             ProgramaTreinamentoSeeder::class,
+            SessaoTreinamentoSeeder::class,
             GrupoMuscularSeeder::class,
             MaquinaTreinoSeeder::class,
-            SessaoTreinamentoSeeder::class,
             SerieExercicioSeeder::class,
         ]);
         // execucao de factories necessarias

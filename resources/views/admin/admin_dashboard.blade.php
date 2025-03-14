@@ -136,7 +136,40 @@
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-@if(isset($sessoesTreinamento) && isset($isSerieExercicioPage))
+@if(isset($sessoesTreinamento) && isset($isSerieExercicioCreatePage))
+    <script>
+        var programaTreinamentoSelect = document.getElementById('id_programa_treinamento');
+        programaTreinamentoSelect.addEventListener('click', function () {
+            var programaTreinamentoId = this.value;
+            var sessoesTreinamento = @json($sessoesTreinamento);
+            var sessaoTreinamentoSelect = document.getElementById('id_sessao_treinamento');
+            var hiddenSessaoTreinamento = document.getElementById('hidden_id_sessao_treinamento'); // Localizar o campo hidden
+
+            sessaoTreinamentoSelect.innerHTML = '';
+            sessoesTreinamento.forEach(sessao => {
+                if (sessao.id_programa_treinamento == programaTreinamentoId) {
+                    var option = document.createElement('option');
+                    option.value = sessao.id_sessao_treinamento;
+                    option.text = sessao.dt_sessao_planejada;
+                    sessaoTreinamentoSelect.appendChild(option);
+                }
+            });
+
+            // Atualiza o valor do campo hidden ao selecionar a primeira opção
+            if (sessaoTreinamentoSelect.options.length > 0) {
+                hiddenSessaoTreinamento.value = sessaoTreinamentoSelect.options[0].value;
+            }
+
+            // Adiciona listener para atualizar o campo hidden quando o valor do select mudar
+            sessaoTreinamentoSelect.addEventListener('change', function () {
+                hiddenSessaoTreinamento.value = this.value;
+            });
+            //fim declaracao hidden
+        });
+    </script>
+@endif
+
+@if(isset($sessoesTreinamento) && isset($isSerieExercicioIndexPage))
     <script>
         var programaTreinamentoSelect = document.getElementById('id_programa_treinamento');
         programaTreinamentoSelect.addEventListener('click', function () {
@@ -224,7 +257,56 @@
 </script>
 @endif
 
-@if(isset($sessoesTreinamento) && isset($isSessaoTreinamentoPage))
+@if(isset($sessoesTreinamento) && isset($isSessaoTreinamentoIndexPage))
+    <script>
+        document.getElementById('id_programa_treinamento').addEventListener('click', function () {
+            var programaTreinamentoId = this.value;
+            var sessoesTreinamento = @json($sessoesTreinamento);
+            var tabelaSessaoTreinamento = document.getElementById('tabela_sessao_treinamento');
+            tabelaSessaoTreinamento.innerHTML = `
+        <tr>
+            <th>Prog Treinamento</th>
+            <th>Dt Sessao pla</th>
+            <th>Tempo duração plan</th>
+            <th>Dt Sessao exec</th>
+            <th>Tempo duração exec</th>
+        </tr>
+    `;
+            // Função para formatar a data no formato dd-mm-yyyy
+            function formatarData(data) {
+                if (!data) return ''; // Verifica se a data é nula ou indefinida
+                var partes = data.split('-');
+                return partes.reverse().join('-');
+            }
+            sessoesTreinamento.forEach(sessao => {
+                if (sessao.id_programa_treinamento == programaTreinamentoId) {
+                    var editUrl = "{{ route('sessao_treinamento.edit', ':id') }}".replace(':id', sessao.id_sessao_treinamento);
+                    var deleteUrl = "{{ route('sessao_treinamento.destroy', ':id') }}".replace(':id', sessao.id_sessao_treinamento);
+                    var row = `
+                <tr>
+                    <td>${sessao.id_programa_treinamento}</td>
+                    <td>${formatarData(sessao.dt_sessao_planejada)}</td>
+                    <td>${sessao.tempo_duracao_planejada}</td>
+                    <td>${formatarData(sessao.dt_sessao_executada)}</td>
+                    <td>${sessao.tempo_duracao_executada}</td>
+                    <td>
+                      <a href="${editUrl}" class="btn btn-inverse-warning"> Editar </a>
+                      <form action="${deleteUrl}" method="POST" style="display:inline-block;">
+                       @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-inverse-danger"  >Apagar</button>
+                    </form>
+                  </td>
+              </tr>
+`               ;
+                    tabelaSessaoTreinamento.innerHTML += row;
+                }
+            });
+        });
+    </script>
+@endif
+
+@if(isset($sessoesTreinamento) && isset($isSessaoTreinamentoEditePage))
     <script>
         document.getElementById('id_programa_treinamento').addEventListener('click', function () {
             var programaTreinamentoId = this.value;
@@ -266,6 +348,28 @@
         });
     </script>
 @endif
+
+{{--@if(isset($programaTreinamento) && isset($isProgramaTreinamentoIndexPage))--}}
+{{--    <script>--}}
+{{--        document.getElementById('id_programa_treinamento').addEventListener('change', function () {--}}
+{{--            var programaTreinamentoId = this.value;--}}
+{{--            // Array de programas de treinamento vindo do Blade para uso no JavaScript--}}
+{{--            var programasTreinamento = @json($programasTreinamento);--}}
+{{--            // Função para formatar a data no formato dd-mm-yyyy--}}
+
+{{--            function formatarData(data) {--}}
+{{--                if (!data) return ''; // Verifica se a data é nula ou indefinida--}}
+{{--                var partes = data.split('-');--}}
+{{--                return partes.reverse().join('-');--}}
+{{--            }--}}
+{{--            // Encontrando o programa selecionado--}}
+{{--            var programaSelecionado = programasTreinamento.find(programa =>--}}
+{{--                programa.id_programa_treinamento == programaTreinamentoId--}}
+{{--            );--}}
+{{--            console.log(programaSelecionado);--}}
+{{--        });--}}
+{{--    </script>--}}
+{{--@endif--}}
 </body>
 </html>
 

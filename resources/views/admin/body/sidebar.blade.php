@@ -23,6 +23,66 @@
                 <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false"
                    aria-controls="emails">
                     <i class="link-icon" data-feather="mail"></i>
+                    <span class="link-title">Programas de Treinamento</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" id="emails">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a href="{{route ('programa_treinamento.index')}}" class="nav-link">Programas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('programa_treinamento.create') }}" class="nav-link">Adicionar programas</a>
+
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false"
+                   aria-controls="emails">
+                    <i class="link-icon" data-feather="mail"></i>
+                    <span class="link-title">Sessões de Treinamento</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" id="emails">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a href="{{route ('sessao_treinamento.index')}}" class="nav-link">Sessões</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('sessao_treinamento.create') }}" class="nav-link">Adicionar sessões</a>
+
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false"
+                   aria-controls="emails">
+                    <i class="link-icon" data-feather="mail"></i>
+                    <span class="link-title">Série e exercícios</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" id="emails">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a href="{{route ('serie_exercicio.index')}}" class="nav-link">Séries e exercícios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('serie_exercicio.create') }}" class="nav-link">Adicionar séries e exercícios</a>
+
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false"
+                   aria-controls="emails">
+                    <i class="link-icon" data-feather="mail"></i>
                     <span class="link-title">Máquinas para treino</span>
                     <i class="link-arrow" data-feather="chevron-down"></i>
                 </a>
@@ -54,46 +114,6 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('grupo_muscular.create') }}" class="nav-link">Adicionar grupos</a>
-
-                        </li>
-
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false"
-                   aria-controls="emails">
-                    <i class="link-icon" data-feather="mail"></i>
-                    <span class="link-title">Série e exercícios</span>
-                    <i class="link-arrow" data-feather="chevron-down"></i>
-                </a>
-                <div class="collapse" id="emails">
-                    <ul class="nav sub-menu">
-                        <li class="nav-item">
-                            <a href="{{route ('serie_exercicio.index')}}" class="nav-link">Séries e exercícios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('serie_exercicio.create') }}" class="nav-link">Adicionar séries e exercícios</a>
-
-                        </li>
-
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false"
-                   aria-controls="emails">
-                    <i class="link-icon" data-feather="mail"></i>
-                    <span class="link-title">Sessões de Treinamento</span>
-                    <i class="link-arrow" data-feather="chevron-down"></i>
-                </a>
-                <div class="collapse" id="emails">
-                    <ul class="nav sub-menu">
-                        <li class="nav-item">
-                            <a href="{{route ('sessao_treinamento.index')}}" class="nav-link">Sessões</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('sessao_treinamento.create') }}" class="nav-link">Adicionar sessões</a>
 
                         </li>
 

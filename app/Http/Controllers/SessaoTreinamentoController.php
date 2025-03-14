@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SessaoTreinamentoRequest;
 use App\Models\GrupoMuscular;
 use App\Models\MaquinaTreino;
 use App\Models\ProgramaTreinamento;
 use App\Models\SerieExercicio;
 use App\Models\SessaoTreinamento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SessaoTreinamentoController extends Controller
 {
+
     public function index()
     {
         // Buscar todas as sessões de treinamento,banco de dados
@@ -21,20 +24,28 @@ class SessaoTreinamentoController extends Controller
 
     public function create()
     {
-        return view('sessoes.create');
+        $programasTreinamento = ProgramaTreinamento::all();
+        return view('sessao_treinamento.sessao_treinamento_create',compact('programasTreinamento'));
     }
 
-    public function store(Request $request)
+    public function store(SessaoTreinamentoRequest $request)
     {
-        $request->validate([
-            'id_programa_treinamento' => 'required|integer',
-            'dt_sessao' => 'nullable|date',
-            'tempo_duracao' => 'nullable|date_format:H:i:s',
-        ]);
+        ///dd($request);
+        ///  dd($request);
+        //DB::enableQueryLog(); // Habilita o log de queries
+        // Os dados já foram validados e preparados
+        $dadosValidados = $request->validated();
+        // Lógica para salvar os dados no banco
 
-        SessaoTreinamento::create($request->all());
-
-        return redirect()->route('sessoes.index')->with('success', 'Sessão de treinamento criada com sucesso.');
+        // SessaoTreinamento::create($dadosValidados);
+        try {
+            SessaoTreinamento::Create($dadosValidados);
+            // Sucesso
+        } catch (\Exception $e) {
+            // Tratamento de erro
+        }
+        // Redirecionar ou retornar resposta adequada
+        return redirect()->route('sessao_treinamento.index')->with('success', 'Sessão de treinamento atualizada com sucesso.');
     }
 
     public function show(SessaoTreinamento $sessao)
@@ -44,28 +55,41 @@ class SessaoTreinamentoController extends Controller
 
     public function edit($idSessaoTreinamento)
     {
-        $SessaoTreinamento = SessaoTreinamento::findOrFail($idSessaoTreinamento);
-        // Recuperar o programa de treinamento associado à sessão de treinamento
-        $programaTreinamento = $SessaoTreinamento->programaTreinamento;
-        return view('sessao_treinamento.sessao_treinamento_edite', compact('SessaoTreinamento','programaTreinamento'));
+//        $sessaoTreinamento = SessaoTreinamento::findOrFail($idSessaoTreinamento);
+        $sessaoTreinamento = SessaoTreinamento::with('programaTreinamento')->findOrFail($idSessaoTreinamento);
+//        dd($sessaoTreinamento);
+
+        $programaTreinamento = $sessaoTreinamento->programaTreinamento;
+//        dd('Teste');
+//        dd($programaTreinamento);
+        return view('sessao_treinamento.sessao_treinamento_edite', compact('sessaoTreinamento','programaTreinamento'));
     }
 
-    public function update(Request $request, $idSessaoTreinamento)
+    public function update(SessaoTreinamentoRequest  $request, $idSessaoTreinamento)
     {
-        $request->validate([
-            'id_programa_treinamento' => 'required|integer',
-            'dt_sessao' => 'nullable|date',
-            'tempo_duracao' => 'nullable|date_format:H:i:s',
-        ]);
-
-        $sessao->update($request->all());
-
-        return redirect()->route('sessoes.index')->with('success', 'Sessão de treinamento atualizada com sucesso.');
+      ///  dd($request);
+        //DB::enableQueryLog(); // Habilita o log de queries
+        // Os dados já foram validados e preparados
+        $dadosValidados = $request->validated();
+        // Lógica para salvar os dados no banco
+      //  dd($dadosValidados);
+       // SessaoTreinamento::create($dadosValidados);
+        try {
+            SessaoTreinamento::updateOrCreate(
+                ['id_sessao_treinamento' => $idSessaoTreinamento],
+                $dadosValidados
+            );
+            // Sucesso
+        } catch (\Exception $e) {
+            // Tratamento de erro
+        }
+        // Redirecionar ou retornar resposta adequada
+        return redirect()->route('sessao_treinamento.index')->with('success', 'Sessão de treinamento atualizada com sucesso.');
     }
 
     public function destroy($idSessaoTreinamento)
     {
-        $sessao->delete();
-        return redirect()->route('sessoes.index')->with('success', 'Sessão de treinamento deletada com sucesso.');
+        SessaoTreinamento::destroy($idSessaoTreinamento);
+        return redirect()->route('sessao_treinamento.index')->with('success', 'Sessão de treinamento deletada com sucesso.');
     }
 }

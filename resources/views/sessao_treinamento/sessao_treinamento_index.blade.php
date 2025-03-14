@@ -1,7 +1,7 @@
 @extends('admin.admin_dashboard')
 @section('admin')
     @php
-        $isSessaoTreinamentoPage = true; // Esta variável define que você está na página correta
+        $isSessaoTreinamentoIndexPage = true; // Esta variável define que você está na página correta
     @endphp
 
     <div class="page-content">
@@ -32,6 +32,7 @@
                             <label class="form-label">Sessões de Treinamento</label>
                         </div>
                         <div class="table-responsive">
+{{--                            TABELA PREENCHIDA NO SCRIPT--}}
                             <table id="tabela_sessao_treinamento" class="table">
                             </table>
                         </div>

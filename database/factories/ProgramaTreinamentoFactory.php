@@ -16,8 +16,8 @@ class ProgramaTreinamentoFactory extends Factory
         return [
             'id_usuario' => $this->faker->numberBetween(1, 10),
             'nome_programa' => $this->faker->word,
-            'dt_inicio' => $this->faker->dateTime(),
-            'dt_final' => $this->faker->dateTime(),
+            'dt_inicio' => $this->faker->date(),
+            'dt_final' => $this->faker->date(),
         ];
     }
 }

@@ -1,6 +1,12 @@
 @extends('admin.admin_dashboard')
 @section('admin')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    @php
+        $isSerieExercicioCreatePage = true; // Esta variável define que você está na página correta
+//        dd($sessaoTreinamento);
+//        dd($programaTreinamento);
+//        dd('Teste');
+    @endphp
     <div class="page-content">
         <div class="row profile-body">
             <div class="col-md-8 col-xl-8 middle-wrapper">
@@ -26,11 +32,6 @@
                                     <label class="form-label">Sessão de Treinamento</label>
                                     <select class="form-select" id="id_sessao_treinamento" data-width="100%">
 {{--                                            SERA PREENCHIDO AUTOMATICAMENTE--}}
-{{--                                        @foreach($sessoesTreinamento as $sessaoTreinamento)--}}
-{{--                                            <option--}}
-{{--                                                value="{{ $sessaoTreinamento->id_sessao_treinamento }}">{{ $sessaoTreinamento->dt_sessao_planejada }}--}}
-{{--                                            </option>--}}
-{{--                                        @endforeach--}}
                                     </select>
                                 </div>
 

@@ -13,7 +13,7 @@ class SessaoTreinamentoFactory extends Factory
     {
         return [
             'id_programa_treinamento' => $this->faker->numberBetween(1, 10),
-            'dt_sessao' => $this->faker->dateTime(),
+            'dt_sessao' => $this->faker->date(),
             'tempo_duracao' => $this->faker->time(),
         ];
     }

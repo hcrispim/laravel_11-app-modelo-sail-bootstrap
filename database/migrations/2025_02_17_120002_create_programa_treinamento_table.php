@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id('id_programa_treinamento');
             $table->unsignedBigInteger('id_usuario');
             $table->string('nome_programa', 45)->nullable();
-            $table->dateTime('dt_inicio')->nullable();
-            $table->dateTime('dt_final')->nullable();
+            $table->date('dt_inicio')->nullable();
+            $table->date('dt_final')->nullable();
             $table->timestamps();
-
             $table->foreign('id_usuario')
                 ->references('id')
                 ->on('users')  // Certifique-se de que esta seja a tabela correta

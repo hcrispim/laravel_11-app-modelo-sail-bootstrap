@@ -5,6 +5,7 @@ use App\Http\Controllers\ComumController;
 use App\Http\Controllers\GrupoMuscularController;
 use App\Http\Controllers\MaquinaTreinoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProgramaTreinamentoController;
 use App\Http\Controllers\SerieExercicioController;
 use App\Http\Controllers\SessaoTreinamentoController;
 use App\Mail\TestEmail;
@@ -87,8 +88,17 @@ Route::controller(SessaoTreinamentoController::class)->group(function(){
     Route::get('/sessao_treinamento/create', 'create')->name('sessao_treinamento.create');
     Route::post('/sessao_treinamento/store', 'store')->name('sessao_treinamento.store');
     Route::get('/sessao_treinamento/edit/{idSessaoTreinamento}', 'edit')->name('sessao_treinamento.edit');
-    Route::post('/sessao_treinamento/update/{idSessaoTreinamento}', 'update')->name('sessao_treinamento.update');
+    Route::put('/sessao_treinamento/update/{idSessaoTreinamento}', 'update')->name('sessao_treinamento.update');
     Route::delete('/sessao_treinamento/destroy/{idSessaoTreinamento}', 'destroy')->name('sessao_treinamento.destroy');
+});
+
+Route::controller(ProgramaTreinamentoController::class)->group(function(){
+    Route::get('/programa_treinamento/index', 'index')->name('programa_treinamento.index');
+    Route::get('/programa_treinamento/create', 'create')->name('programa_treinamento.create');
+    Route::post('/programa_treinamento/store', 'store')->name('programa_treinamento.store');
+    Route::get('/programa_treinamento/edit/{idProgramaTreinamento}', 'edit')->name('programa_treinamento.edit');
+    Route::put('/programa_treinamento/update/{idProgramaTreinamento}', 'update')->name('programa_treinamento.update');
+    Route::delete('/programa_treinamento/destroy/{idProgramaTreinamento}', 'destroy')->name('programa_treinamento.destroy');
 });
 
 require __DIR__ . '/auth.php';

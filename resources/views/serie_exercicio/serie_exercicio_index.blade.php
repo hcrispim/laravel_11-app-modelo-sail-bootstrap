@@ -1,7 +1,7 @@
 @extends('admin.admin_dashboard')
 @section('admin')
     @php
-        $isSerieExercicioPage = true; // Esta variável define que você está na página correta
+        $isSerieExercicioIndexPage = true; // Esta variável define que você está na página correta
     @endphp
     <div class="page-content">
         <nav class="page-breadcrumb">
