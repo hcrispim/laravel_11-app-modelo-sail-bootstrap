@@ -31,8 +31,6 @@ class ProgramaTreinamentoRequest extends FormRequest
             'dt_inicio' => $this->formatarData($this->dt_inicio),
             'dt_final' => $this->formatarData($this->dt_final),
          ]);
-      //  dump($this->all()); // Exibe todos os dados da requisição
-     //   dd($this->all()); // Exibe o valor do campo 'nome_programa' e interrompe a execução
     }
     private function formatarData($data)
     {

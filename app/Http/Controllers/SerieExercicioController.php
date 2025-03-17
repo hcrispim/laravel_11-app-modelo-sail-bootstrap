@@ -8,11 +8,15 @@ use App\Models\ProgramaTreinamento;
 use App\Models\SerieExercicio;
 use App\Models\SessaoTreinamento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SerieExercicioController extends Controller
 {
     public function index()
     {
+        if (!Gate::allows('viewAny')) {
+            abort(403, 'Acesso não autorizado.');
+        }
         // Buscar todas as sessões de treinamento, grupos musculares e máquinas de treino do banco de dados
         $programasTreinamento = ProgramaTreinamento::all();
         $sessoesTreinamento = SessaoTreinamento::all();
@@ -26,6 +30,9 @@ class SerieExercicioController extends Controller
 
     public function create()
     {
+        if (!Gate::allows('create')) {
+            abort(403, 'Acesso não autorizado.');
+        }
         $sessoesTreinamento = SessaoTreinamento::all();
         $gruposMusculares = GrupoMuscular::all();
         $maquinasTreino = MaquinaTreino::all();
@@ -45,6 +52,9 @@ class SerieExercicioController extends Controller
 
     public function store(Request $request)
     {
+        if (!Gate::allows('create')) {
+            abort(403, 'Acesso não autorizado.');
+        }
 //        dd($request);
         $request->validate([
             'id_sessao_treinamento' => 'required|exists:sessao_treinamento,id_sessao_treinamento',
@@ -66,6 +76,9 @@ class SerieExercicioController extends Controller
 
     public function edit($idSerieExercicio)
     {
+        if (!Gate::allows('update')) {
+            abort(403, 'Acesso não autorizado.');
+        }
         $gruposMusculares = GrupoMuscular::all();
         $maquinasTreino = MaquinaTreino::all();
         $serieExercicio = SerieExercicio::findOrFail($idSerieExercicio);
@@ -84,7 +97,9 @@ class SerieExercicioController extends Controller
     public function update(Request $request, $idSerieExercicio)
     {
 //        dd($request); //DADOS INCOMPLETOS NO REQUEST VER NO EDIT SERIE_EXERCICIO
-
+        if (!Gate::allows('update')) {
+            abort(403, 'Acesso não autorizado.');
+        }
         $request->validate([
             'id_sessao_treinamento' => 'required|exists:sessao_treinamento,id_sessao_treinamento',
             'id_grupo_muscular' => 'required|exists:grupo_muscular,id_grupo_muscular',
@@ -101,6 +116,9 @@ class SerieExercicioController extends Controller
 
     public function destroy($idSerieExercicio)
     {
+        if (!Gate::allows('delete')) {
+            abort(403, 'Acesso não autorizado.');
+        }
         $serieExercicio = SerieExercicio::findOrFail($idSerieExercicio);
         $serieExercicio->delete();
         return redirect()->route('serie_exercicio.index')->with('success', 'Série de Exercício deletada com sucesso!');

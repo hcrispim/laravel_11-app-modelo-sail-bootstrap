@@ -18,6 +18,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'admin' => 'admin',
         'comum' => 'comum',
     ];
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
     /**
      * The attributes that are mass assignable.
      *

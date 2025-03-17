@@ -41,9 +41,29 @@ class SessaoTreinamentoRequest extends FormRequest
         ]);
     }
 
+    /**
+     * Converte data do formato d/m/Y para Y-m-d (formato MySQL)
+     */
     private function formatarData($data)
     {
-        return $data ?: null;
+        if (!$data) {
+            return null;
+        }
+
+        // Remover espaços extras
+        $data = trim($data);
+
+        // Se a data já estiver no formato Y-m-d, não converter
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $data)) {
+            return $data;
+        }
+
+        // Verifica se está no formato esperado d/m/Y e converte para Y-m-d
+        try {
+            return Carbon::createFromFormat('d/m/Y', $data)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return null; // Retorna null caso a conversão falhe
+        }
     }
     private function formatarHora($hora)
     {
@@ -51,8 +71,19 @@ class SessaoTreinamentoRequest extends FormRequest
             return null;
         }
 
-        // Verifica se a hora está no formato H:i
-        $horaFormatada = \DateTime::createFromFormat('H:i', $hora);
-        return $horaFormatada && $horaFormatada->format('H:i') === $hora ? $hora : null;
+        // Remover espaços extras
+        $hora = trim($hora);
+
+        // Verifica se a hora já está no formato correto H:i
+        if (preg_match('/^\d{2}:\d{2}$/', $hora)) {
+            return $hora;
+        }
+
+        // Se a hora estiver no formato H:i:s, converter para H:i
+        try {
+            return Carbon::createFromFormat('H:i:s', $hora)->format('H:i');
+        } catch (\Exception $e) {
+            return null; // Retorna null se a conversão falhar
+        }
     }
 }

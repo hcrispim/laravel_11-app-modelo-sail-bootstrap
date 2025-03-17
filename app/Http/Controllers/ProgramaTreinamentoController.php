@@ -9,6 +9,7 @@ use App\Models\SessaoTreinamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class ProgramaTreinamentoController extends Controller
 {
@@ -17,12 +18,14 @@ class ProgramaTreinamentoController extends Controller
      */
     public function index()
     {
-//        $programas_treinamento = ProgramaTreinamento::all();
+        if (!Gate::allows('viewAny')) {
+            abort(403, 'Acesso não autorizado.');
+        }
         $user = Auth::user();
         $programas_treinamento = ProgramaTreinamento::with('usuario')
             ->where('id_usuario', $user->id)
             ->get();
-       // dd($programas_treinamento);
+        // dd($programas_treinamento);
         return view('programa_treinamento.programa_treinamento_index', compact('programas_treinamento'));
     }
 
@@ -31,26 +34,39 @@ class ProgramaTreinamentoController extends Controller
      */
     public function create()
     {
-       // $programasTreinamento = ProgramaTreinamento::all();
-      //  return view('programa_treinamento.programa_treinamento_create',compact('programasTreinamento'));
+        if (!Gate::allows('create')) {
+            abort(403, 'Acesso não autorizado.');
+        }
         return view('programa_treinamento.programa_treinamento_create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProgramaTreinamentoRequest $request)
+    public function store(Request $request)
     {
-        $dadosValidados = $request->validated();
+        if (!Gate::allows('create')) {
+            abort(403, 'Acesso não autorizado.');
+        }
+        // Validação dos dados
+        $validatedData = $request->validate([
+            'nome_programa' => 'required|string',
+            'dt_inicio' => 'required|date_format:Y-m-d',
+            'dt_final' => 'required|date_format:Y-m-d',
+        ]);
+        // Adicionando o id do usuário logado
+        $validatedData['id_usuario'] = auth()->id();
 
         try {
-            ProgramaTreinamento::Create($dadosValidados);
-            // Sucesso
+            // Criando o registro no banco
+            ProgramaTreinamento::create($validatedData);
+
+            return redirect()->route('programa_treinamento.index')
+                ->with('success', 'Programa de treinamento cadastrado com sucesso.');
         } catch (\Exception $e) {
-            // Tratamento de erro
+            return redirect()->back()
+                ->with('error', 'Ocorreu um erro ao cadastrar o programa de treinamento. ' . $e->getMessage());
         }
-        // Redirecionar ou retornar resposta adequada
-        return redirect()->route('programa_treinamento.index')->with('success', 'Programa de treinamento atualizado com sucesso.');
     }
 
     /**
@@ -66,11 +82,10 @@ class ProgramaTreinamentoController extends Controller
      */
     public function edit($idProgramaTreinamento)
     {
-        //dd('Entrou no edit ');
+        if (!Gate::allows('update')) {
+            abort(403, 'Acesso não autorizado.');
+        }
         $programaTreinamento = ProgramaTreinamento::findOrFail($idProgramaTreinamento);
-       // $programasTreinamento = ProgramaTreinamento::all();
-       // dd($ProgramaTreinamento);
-//        return view('programa_treinamento.programa_treinamento_edite', compact('programaTreinamento','programasTreinamento'));
         return view('programa_treinamento.programa_treinamento_edite', compact('programaTreinamento'));
     }
 
@@ -79,34 +94,30 @@ class ProgramaTreinamentoController extends Controller
      */
     public function update(ProgramaTreinamentoRequest $request, $idProgramaTreinamento)
     {
+        if (!Gate::allows('update')) {
+            abort(403, 'Acesso não autorizado.');
+        }
         DB::enableQueryLog();
-      //  dd('entrou em update apos ProgramaTreinamentoRequest');
         $dadosValidados = $request->validated();
-    //    dump($dadosValidados);
-         try {
-//            ProgramaTreinamento::updateOrCreate(
-//                ['id_programa_treinamento' => $idProgramaTreinamento],
-//                $dadosValidados
+        try {
             ProgramaTreinamento::updateOrCreate($dadosValidados);
-//            );
-            // Sucesso
         } catch (\Exception $e) {
             // Tratamento de erro
         }
-
-       $queries = DB::getQueryLog();
+        $queries = DB::getQueryLog();
         $lastQuery = end($queries);
-        //dd($lastQuery);
-        // Redirecionar ou retornar resposta adequada
         return redirect()->route('programa_treinamento.index')->with('success', 'Programa de treinamento atualizado com sucesso.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($idSessaoTreinamento)
+    public function destroy($idProgramaTreinamento)
     {
-        SessaoTreinamento::destroy($idSessaoTreinamento);
+        if (!Gate::allows('delete')) {
+            abort(403, 'Acesso não autorizado.');
+        }
+        ProgramaTreinamento::destroy($idProgramaTreinamento);
         return redirect()->route('programa_treinamento.index')->with('success', 'Programa de treinamento deletado com sucesso.');
     }
 }
